@@ -1,0 +1,4 @@
+protos:
+  - platform/id_srv_snowflake.proto
+
+rel: github.com/tinyhole/id-srv-snowflake
