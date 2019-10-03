@@ -6,6 +6,7 @@ package snowflake
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
+	base "github.com/tinyhole/id-srv-snowflake/idl/base"
 	math "math"
 )
 
@@ -34,7 +35,7 @@ var _ server.Option
 // Client API for SnowFlake service
 
 type SnowFlakeService interface {
-	GetID(ctx context.Context, in *GetIDReq, opts ...client.CallOption) (*GetIDRsp, error)
+	GetID(ctx context.Context, in *base.Empty, opts ...client.CallOption) (*GetIDRsp, error)
 }
 
 type snowFlakeService struct {
@@ -55,7 +56,7 @@ func NewSnowFlakeService(name string, c client.Client) SnowFlakeService {
 	}
 }
 
-func (c *snowFlakeService) GetID(ctx context.Context, in *GetIDReq, opts ...client.CallOption) (*GetIDRsp, error) {
+func (c *snowFlakeService) GetID(ctx context.Context, in *base.Empty, opts ...client.CallOption) (*GetIDRsp, error) {
 	req := c.c.NewRequest(c.name, "SnowFlake.GetID", in)
 	out := new(GetIDRsp)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -68,12 +69,12 @@ func (c *snowFlakeService) GetID(ctx context.Context, in *GetIDReq, opts ...clie
 // Server API for SnowFlake service
 
 type SnowFlakeHandler interface {
-	GetID(context.Context, *GetIDReq, *GetIDRsp) error
+	GetID(context.Context, *base.Empty, *GetIDRsp) error
 }
 
 func RegisterSnowFlakeHandler(s server.Server, hdlr SnowFlakeHandler, opts ...server.HandlerOption) error {
 	type snowFlake interface {
-		GetID(ctx context.Context, in *GetIDReq, out *GetIDRsp) error
+		GetID(ctx context.Context, in *base.Empty, out *GetIDRsp) error
 	}
 	type SnowFlake struct {
 		snowFlake
@@ -86,6 +87,6 @@ type snowFlakeHandler struct {
 	SnowFlakeHandler
 }
 
-func (h *snowFlakeHandler) GetID(ctx context.Context, in *GetIDReq, out *GetIDRsp) error {
+func (h *snowFlakeHandler) GetID(ctx context.Context, in *base.Empty, out *GetIDRsp) error {
 	return h.SnowFlakeHandler.GetID(ctx, in, out)
 }

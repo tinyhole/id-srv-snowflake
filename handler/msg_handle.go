@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/tinyhole/id-srv-snowflake/idl/base"
 	"github.com/tinyhole/id-srv-snowflake/idl/platform/id/srv/snowflake"
 	//"github.com/micro/go-micro/config"
 	"context"
@@ -97,14 +98,9 @@ func init(){
 
 type Handle struct{}
 
+func (h *Handle) GetID(ctx context.Context, req *base.Empty, rsp *snowflake.GetIDRsp)error {
 
-
-func (h *Handle) GetID(ctx context.Context, req *snowflake.GetIDReq, resp *snowflake.GetIDRsp)error {
-
-	for i := int64(0); i < req.Num; i++{
-		id := globalSnow.GetSnowflakeId()
-		resp.IDs = append(resp.IDs, id)
-	}
+	rsp.ID = globalSnow.GetSnowflakeId()
 
 	return nil
 }
